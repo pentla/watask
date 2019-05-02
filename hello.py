@@ -1,27 +1,13 @@
-from src.app import Router
-router = Router()
+from src.app import App
+from wsgiref.simple_server import make_server
 
-def show_user():
-    return 'show_user'
+app = App()
 
-router.add('GET', '^/users/$', show_user)
+@app.route('^/$', 'GET')
+def hello(request, start_response):
+    start_response('200 OK', [('Content-type', 'text/plain; charset=utf-8')])
+    return [b'Hello d World']
 
-callback, kwargs = router.match('POST', '/users/')
-print(callback, kwargs)
-
-
-# def application(env, start_response):
-#     start_response('200, OK', [('Content-type', 'text/plain; charset=utf-8')])
-#     return [b'hello, world']
-
-# def application(env, start_response):
-#     path = env['PATH_INFO']
-#     if path == '/':
-#         start_response('200 OK', [('Content-type', 'text/plain')])
-#         return [b'Hello World']
-#     elif path == '/foo':
-#         start_response('200 OK', [('Content-type', 'text/plain')])
-#         return [b'foo']
-#     else:
-#         start_response('404 Not Found', [('Content-type', 'text/plain')])
-#         return [b'404 Not Found']
+if __name__ == '__main__':
+    httpd = make_server('', 8000, app)
+    httpd.serve_forever()

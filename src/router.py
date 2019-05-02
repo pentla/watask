@@ -34,4 +34,3 @@ class Router:
             error_callback = http405
 
         return error_callback, {}
-
